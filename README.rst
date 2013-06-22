@@ -6,7 +6,7 @@ YD Technology Common libs
    :target: http://travis-ci.org/YD-Technology/ydcommon
 
 .. image:: https://coveralls.io/repos/YD-Technology/ydcommon/badge.png?branch=master
-   :target: https://coveralls.io/r/lukaszb/frogress/
+   :target: https://coveralls.io/r/YD-Technology/ydcommon/
 
 Commands
 ========
