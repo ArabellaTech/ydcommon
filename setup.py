@@ -16,10 +16,9 @@ except IOError as err:
         "long_description (%s)\n" % readme_file)
     sys.exit(1)
 
-extra_kwargs = {'tests_require': ['mock>1.0', 'django-setuptest']}
+extra_kwargs = {'tests_require': ['mock>1.0']}
 if sys.version_info < (2, 7):
     extra_kwargs['tests_require'].append('unittest2')
-    extra_kwargs['tests_require'].append('argparse')
 
 ydcommon = __import__('ydcommon')
 
@@ -45,7 +44,7 @@ setup(
     packages=find_packages(),
     license='MIT',
     scripts=[],
-    test_suite='setuptest.setuptest.SetupTestSuite',
+    test_suite="test_project.runtests.runtests",
     include_package_data=True,
     classifiers=[
         'License :: OSI Approved :: MIT License',

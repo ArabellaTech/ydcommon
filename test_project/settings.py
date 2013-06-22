@@ -16,7 +16,11 @@ project = lambda: os.path.dirname(os.path.realpath(__file__))
 location = lambda x: os.path.join(str(project()), str(x))
 
 TEMPLATE_DIRS = (
-    location("test_project/templates"),
+    location("templates"),
 )
 
-STATIC_ROOT = location("test_project/static")
+STATIC_ROOT = location("static")
+
+SECRET_KEY = 'fake'
+
+#TEST_RUNNER = 'test_project.runner.CoverageTestSuiteRunner'
