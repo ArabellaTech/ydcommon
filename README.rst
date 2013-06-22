@@ -2,7 +2,7 @@
 YD Technology Common libs
 =========================
 
-.. image:: https://secure.travis-ci.org/YD-Technology/ydcommon.png?branch=master
+.. image:: https://travis-ci.org/YD-Technology/ydcommon.png?branch=master
    :target: http://travis-ci.org/YD-Technology/ydcommon
 
 .. image:: https://coveralls.io/repos/YD-Technology/ydcommon/badge.png?branch=master
