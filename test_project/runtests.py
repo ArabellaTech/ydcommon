@@ -13,7 +13,9 @@ def runtests(*test_args):
 
     from django.test.simple import DjangoTestSuiteRunner
     failures = DjangoTestSuiteRunner(
-        verbosity=1, interactive=True, failfast=False).run_tests(test_args)
+        verbosity=1,
+        interactive=True,
+        failfast=False).run_tests(['ydcommon'], *test_args)
     sys.exit(failures)
 
 

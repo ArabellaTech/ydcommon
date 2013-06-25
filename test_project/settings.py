@@ -3,6 +3,9 @@ import os
 DATABASE_ENGINE = 'sqlite3'
 
 INSTALLED_APPS = (
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
     'ydcommon',
 )
 DATABASES = {
@@ -23,4 +26,4 @@ STATIC_ROOT = location("static")
 
 SECRET_KEY = 'fake'
 
-#TEST_RUNNER = 'test_project.runner.CoverageTestSuiteRunner'
+ROOT_URLCONF = 'test_project.urls'

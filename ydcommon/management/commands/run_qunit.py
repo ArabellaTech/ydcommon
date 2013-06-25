@@ -7,13 +7,13 @@ from django.template import RequestContext
 from django.http import HttpRequest
 from optparse import make_option
 
+from ydcommon.settings import IGNORE_QUNIT_HTML_FILES
+
 try:
     import subprocess
     import commands
 except ImportError:
     pass
-
-IGNORE_FILES = ['index', 'base']
 
 
 class Command(NoArgsCommand):
@@ -35,7 +35,7 @@ class Command(NoArgsCommand):
             path = os.path.join(template_dir, 'js-tests')
             files = [f.replace('.html', '') for f in os.listdir(path)
                      if os.path.isfile(os.path.join(path, f))]
-            for ignore_file in IGNORE_FILES:
+            for ignore_file in IGNORE_QUNIT_HTML_FILES:
                 if ignore_file in files:
                     files.remove(ignore_file)
             for filename in files:

@@ -34,3 +34,5 @@ nosetests.xml
 .pydevproject
 .ropeproject
 .settings
+setup2.py
+test_settings.py
