@@ -24,6 +24,10 @@ TEMPLATE_DIRS = (
 
 STATIC_ROOT = location("static")
 
+STATICFILES_DIRS = [
+    location("static"),
+]
+
 SECRET_KEY = 'fake'
 
 ROOT_URLCONF = 'test_project.urls'

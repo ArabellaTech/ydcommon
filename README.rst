@@ -11,6 +11,7 @@ YD Technology Common libs
 Settings
 ========
 ``IGNORE_QUNIT_HTML_FILES`` ignore HTML qunits files
+``JSHINT_FILES_FIND`` JS Hint search files grep. Default ``-name "*.js" | xargs grep -l '/\*jslint' | grep -v libs``
 
 Views
 =====
@@ -25,3 +26,8 @@ Running Qunit tests
 ::
 
     ./manage.py run_qunit
+
+Running JS Hint
+::
+
+    ./manage.py jshint
