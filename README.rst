@@ -17,7 +17,7 @@ Views
 ``QunitTestsView`` Qunit tests (stuff permission required), example entry in urls.py:
 ::
 
-    url(r"^js-tests/(?P<path>.*)", 'ydcommon.views.qunit_view'),
+    url(r"^js-tests/(?P<path>.*)", 'ydcommon.views.qunit_view', name='quinit'),
 
 Commands
 ========

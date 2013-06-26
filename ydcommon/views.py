@@ -2,6 +2,7 @@ import os
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
+from django.core.urlresolvers import reverse
 
 from ydcommon.settings import IGNORE_QUNIT_HTML_FILES
 
@@ -19,7 +20,11 @@ class QunitTestsView(TemplateView):
                 for ignore_file in IGNORE_QUNIT_HTML_FILES:
                     if ignore_file in files:
                         files.remove(ignore_file)
-            context['files'] = files
+                tests = []
+                for f in files:
+                    tests.append({'file': f,
+                                  'url': reverse(qunit_view, args=[f])})
+            context['tests'] = tests
         return context
 
     def get(self, request, *args, **kwargs):
