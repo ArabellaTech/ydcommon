@@ -1,0 +1,10 @@
+<h1>QUnit Tests</h1>
+<a href="https://github.com/mmonteleone/pavlov">Documentation</a><br />
+Tests template directory: template/js-tests/<br />
+<a href="http://javascript.crockford.com/code.html">Styleguide for JavaScript files</a>
+<h2>Test cases:</h2>
+<ul>
+{% for t in tests %}
+	<li><a href="{{ t.url }}">{{ t.file }}</a></li>
+{% endfor %}
+</ul>
