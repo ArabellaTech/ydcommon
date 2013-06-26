@@ -8,11 +8,11 @@ from ydcommon.settings import IGNORE_QUNIT_HTML_FILES
 
 
 class QunitTestsView(TemplateView):
-    template_name = 'js-tests/index.html'
+    template_name = 'ydcommon/js-tests/index.html'
 
     def get_context_data(self, **kwargs):
         context = super(QunitTestsView, self).get_context_data(**kwargs)
-        if kwargs['path'] == 'index':
+        if not kwargs['path'] or kwargs['path'] == 'index':
             for template_dir in settings.TEMPLATE_DIRS:
                 path = os.path.join(template_dir, 'js-tests')
                 files = [f.replace('.html', '') for f in os.listdir(path)
@@ -29,8 +29,9 @@ class QunitTestsView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         if not kwargs['path']:
-            kwargs['path'] = 'index'
-        self.template_name = 'js-tests/%s.html' % kwargs['path']
+            self.template_name = 'ydcommon/js-tests/index.html'
+        else:
+            self.template_name = 'js-tests/%s.html' % kwargs['path']
         return super(QunitTestsView, self).get(request, *args, **kwargs)
 
 qunit_view = staff_member_required(QunitTestsView.as_view())
