@@ -50,8 +50,12 @@ class Command(NoArgsCommand):
                 cmd = "phantomjs %s file://`pwd`/reports/%s.html junit-xml" % \
                       (qunit, filename)
                 if sys.version_info > (2, 7):
-                    result = subprocess.check_output(cmd,
-                                                     stderr=subprocess.STDOUT)
+                    try:
+                        result = subprocess.check_output(cmd,
+                                                         stderr=subprocess.STDOUT,
+                                                         shell=True)
+                    except subprocess.CalledProcessError as e:
+                        result = e.output
                 else:
                     result = commands.getstatusoutput(cmd)
                 with open('reports/junit-%s.xml' % filename, 'w') as f:
