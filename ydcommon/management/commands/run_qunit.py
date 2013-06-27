@@ -43,7 +43,7 @@ class Command(NoArgsCommand):
                 output = render_to_string(file_path, data).encode('utf-8')
                 if options['local_paths']:
                     output = str(output)
-                    output = output.replace('src="/static/', "src=\"${0}/"
+                    output = output.replace('src="/static/', "src=\"{0}/"
                                             .format(settings.STATIC_ROOT))
                 with open('reports/%s.html' % filename, 'w') as f:
                     f.write(output)
