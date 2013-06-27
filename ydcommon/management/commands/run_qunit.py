@@ -57,6 +57,6 @@ class Command(NoArgsCommand):
                     except subprocess.CalledProcessError as e:
                         result = e.output
                 else:
-                    result = commands.getstatusoutput(cmd)
+                    code, result = commands.getstatusoutput(cmd)
                 with open('reports/junit-%s.xml' % filename, 'w') as f:
-                    f.write(result[1])
+                    f.write(result)
