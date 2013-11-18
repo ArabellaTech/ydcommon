@@ -58,7 +58,7 @@ def update_qa():
     """
     switch('dev')
     switch('qa')
-    local('git merge develop')
+    local('git merge --no-edit develop')
     local('git push')
     print red('PLEASE DEPLOY CODE: fab deploy:all')
 
