@@ -52,6 +52,17 @@ def release_qa():
     print red('PLEASE DEPLOY CODE: fab deploy:all')
 
 
+def update_qa():
+    """
+        Merge code from develop to qa
+    """
+    switch('dev')
+    switch('qa')
+    local('git merge develop')
+    local('git push')
+    print red('PLEASE DEPLOY CODE: fab deploy:all')
+
+
 def check_branch(environment, user):
     if environment == 'qa':
         local_branch = get_branch_name()
