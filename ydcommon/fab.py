@@ -68,6 +68,6 @@ def check_branch(environment, user):
         local_branch = get_branch_name()
         remote_branch = get_branch_name(False)
         if local_branch != remote_branch:
-            change = confirm(red('Branch on server is different, do you want to replace your local branch with server version?'), default=True)
+            change = confirm(red('Branch on server is different, do you want to checkout %s ?' % local_branch), default=True)
             if change:
                 sudo('git checkout %s' % local_branch, user=user)
