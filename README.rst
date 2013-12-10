@@ -31,3 +31,8 @@ Running JS Hint
 ::
 
     ./manage.py jshint
+
+Clear database - drop all tables
+::
+
+    ./manage.py clear_database
