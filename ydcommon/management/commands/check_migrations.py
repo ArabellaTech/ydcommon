@@ -23,13 +23,12 @@ class Command(NoArgsCommand):
     def handle_noargs(self, xml_output, **options):
         cmd = "./manage.py schemamigration %s --auto"
         for app in settings.PROJECT_APPS:
-            print app
             code, result = False, False
             if sys.version_info > (2, 7):
                 try:
                     result = subprocess.check_call(cmd % app,
-                                                     stderr=subprocess.STDOUT,
-                                                     shell=True)
+                                                   stderr=subprocess.STDOUT,
+                                                   shell=True)
                 except subprocess.CalledProcessError as e:
                     code = e.returncode
                     result = e.output
