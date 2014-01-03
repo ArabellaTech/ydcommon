@@ -36,3 +36,7 @@ Clear database - drop all tables
 ::
 
     ./manage.py clear_database
+
+Dump database
+::
+    ./manage.py dump_database
