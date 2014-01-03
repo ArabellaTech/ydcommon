@@ -1,10 +1,18 @@
-from fabric.api import local, sudo, run
+import os
+import base64
+import uuid
+
+from datetime import datetime
+
+from django.template.defaultfilters import slugify
+
+from fabric.api import local, sudo, run, env, cd, get
 from fabric.operations import prompt
 from fabric.colors import red
 from fabric.contrib.console import confirm
 
 
-def get_branch_name(on_local=True):
+def _get_branch_name(on_local=True):
     cmd = "git branch --no-color 2> /dev/null | sed -e '/^[^*]/d'"
     if on_local:
         name = local(cmd, capture=True).replace("* ", "")
@@ -45,8 +53,8 @@ def release_qa():
         Release code to QA server
     """
     name = prompt(red('Sprint name?'), default='Sprint 1').lower().replace(' ', "_")
-    date = prompt(red('Sprint start date (Y-m-d)?'), default='2013-01-20').replace('-', '')
-    release_name = '%s_%s' % (date, name)
+    release_date = prompt(red('Sprint start date (Y-m-d)?'), default='2013-01-20').replace('-', '')
+    release_name = '%s_%s' % (release_date, name)
     local('git flow release start %s' % release_name)
     local('git flow release publish %s' % release_name)
     print red('PLEASE DEPLOY CODE: fab deploy:all')
@@ -63,11 +71,63 @@ def update_qa():
     print red('PLEASE DEPLOY CODE: fab deploy:all')
 
 
-def check_branch(environment, user):
+def _check_branch(environment, user):
     if environment == 'qa':
-        local_branch = get_branch_name()
-        remote_branch = get_branch_name(False)
+        local_branch = _get_branch_name()
+        remote_branch = _get_branch_name(False)
         if local_branch != remote_branch:
-            change = confirm(red('Branch on server is different, do you want to checkout %s ?' % local_branch), default=True)
+            change = confirm(red('Branch on server is different, do you want to checkout %s ?' % local_branch),
+                             default=True)
             if change:
                 sudo('git checkout %s' % local_branch, user=user)
+
+
+def _sql_paths(*args):
+    args = [str(arg) for arg in args]
+    return slugify('-'.join(args)) + '.sql.gz'
+
+
+def backup_db():
+    """
+        Backup local database
+    """
+    if not os.path.exists('backups'):
+        os.makedirs('backups')
+    local('python manage.py dump_database | gzip > backups/' + _sql_paths('local', datetime.now()))
+
+
+def get_db():
+    """
+        Get database
+    """
+    with cd(env.remote_path):
+        file_path = '/tmp/' + _sql_paths('remote', base64.urlsafe_b64encode(uuid.uuid4().bytes).replace('=', ''))
+        run(env.python + ' manage.py dump_database | gzip > ' + file_path)
+    local_file_path = './backups/' + _sql_paths('remote_', datetime.now())
+    get(file_path, local_file_path)
+    run('rm ' + file_path)
+    return local_file_path
+
+
+def replace_local_db():
+    """
+        Replace local database
+    """
+    backup_db()
+    local_file_path = get_db()
+    local('gzip -dc %s | python manage.py dbshell' % local_file_path)
+
+
+def command(command):
+    """
+        Run custom Django management command
+    """
+    with cd(env.remote_path):
+        sudo(env.python + ' manage.py %s' % env.command, user=env.remote_user)
+
+
+def update_cron():
+    """
+        Update cron
+    """
+    sudo('crontab  %sconfig/crontab' % env.remote_path, user=env.remote_user)
