@@ -4,7 +4,7 @@ import uuid
 
 from datetime import datetime
 
-from django.template.defaultfilters import slugify
+from django.template.defaultfilters import slugify as _slugify
 
 from fabric.api import local, sudo, run, env, cd, get
 from fabric.operations import prompt
@@ -84,7 +84,8 @@ def _check_branch(environment, user):
 
 def _sql_paths(*args):
     args = [str(arg) for arg in args]
-    return slugify('-'.join(args)) + '.sql.gz'
+    args.append(_get_branch_name())
+    return _slugify('-'.join(args)) + '.sql.gz'
 
 
 def backup_db():
@@ -96,9 +97,9 @@ def backup_db():
     local('python manage.py dump_database | gzip > backups/' + _sql_paths('local', datetime.now()))
 
 
-def get_db():
+def _get_db():
     """
-        Get database
+        Get database from server
     """
     with cd(env.remote_path):
         file_path = '/tmp/' + _sql_paths('remote', base64.urlsafe_b64encode(uuid.uuid4().bytes).replace('=', ''))
@@ -109,12 +110,25 @@ def get_db():
     return local_file_path
 
 
-def replace_local_db():
+def restore_db(path):
     """
-        Replace local database
+        Restore database with given file path (support compressed and not compressed files)
+        Usage:
+            fab restore_db ~/dump.sql
+            fab restore_db ~/dump.sql.gz
+    """
+    if file.endswith('.gz'):
+        local('gzip -dc %s | python manage.py dbshell' % path)
+    else:
+        local('python manage.py dbshell < %s ' % path)
+
+
+def pull_db():
+    """
+        Replace local database with database from server (server based on branch)
     """
     backup_db()
-    local_file_path = get_db()
+    local_file_path = _get_db()
     local('gzip -dc %s | python manage.py dbshell' % local_file_path)
 
 
