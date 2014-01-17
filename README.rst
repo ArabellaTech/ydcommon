@@ -7,7 +7,7 @@ YD Technology Common libs
 
 .. image:: https://coveralls.io/repos/YD-Technology/ydcommon/badge.png?branch=master
    :target: https://coveralls.io/r/YD-Technology/ydcommon/
-   
+
 .. image:: https://d2weczhvl823v0.cloudfront.net/YD-Technology/ydcommon/trend.png
    :alt: Bitdeli badge
    :target: https://bitdeli.com/free
@@ -26,6 +26,10 @@ Views
 
 Commands
 ========
+Checking requirement for tests
+::
+    ./manage.py check_test_requirements
+
 Running Qunit tests
 ::
 
