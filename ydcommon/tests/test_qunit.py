@@ -7,7 +7,11 @@ from django.contrib.auth.models import User
 
 BUILTIN_MODULE = '__builtin__'
 CMD = 'ydcommon.management.commands.run_qunit.commands.getstatusoutput'
-CMD_VALUE = (0, 'X')
+CMD_VALUE = (0, """X
+<!--
+ Tests completed in 289 milliseconds.
+16 tests of 16 passed, 0 failed.
+-->X""")
 if sys.version_info > (3, 0):
     BUILTIN_MODULE = 'builtins'
 
