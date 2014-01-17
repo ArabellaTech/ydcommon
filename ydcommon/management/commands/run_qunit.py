@@ -1,11 +1,16 @@
+from __future__ import print_function
+
 import os
 import sys
+import re
+
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
 from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.http import HttpRequest
 from optparse import make_option
+from django.core.management import call_command
 
 from ydcommon.settings import IGNORE_QUNIT_HTML_FILES
 
@@ -14,6 +19,8 @@ try:
     import commands
 except ImportError:
     pass
+
+RE_RESULTS = re.compile("<\!--(.*)-->", re.DOTALL)
 
 
 class Command(NoArgsCommand):
@@ -26,6 +33,13 @@ class Command(NoArgsCommand):
     help = 'Render mvc tests'
 
     def handle_noargs(self, **options):
+        print('Preparing files')
+        if 'django.contrib.staticfiles' in settings.INSTALLED_APPS:
+            call_command('collectstatic', interactive=False)
+        if 'compressor' in settings.INSTALLED_APPS:
+            call_command('compress', force=True, verbosity=0)
+
+        print('Running tests')
         qunit = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                              '..', '..', 'scripts', 'run-qunit.js')
 
@@ -45,6 +59,8 @@ class Command(NoArgsCommand):
                     output = str(output)
                     output = output.replace('src="/static/', "src=\"{0}/"
                                             .format(settings.STATIC_ROOT))
+                    output = output.replace('href="/static/', "href=\"{0}/"
+                                            .format(settings.STATIC_ROOT))
                 with open('reports/%s.html' % filename, 'w') as f:
                     f.write(output)
                 cmd = "phantomjs %s file://`pwd`/reports/%s.html junit-xml" % \
@@ -60,3 +76,4 @@ class Command(NoArgsCommand):
                     code, result = commands.getstatusoutput(cmd)
                 with open('reports/junit-%s.xml' % filename, 'w') as f:
                     f.write(result)
+                print(filename.title() + ' - ' + RE_RESULTS.findall(result)[0].replace('\n', ' ').strip())

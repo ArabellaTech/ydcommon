@@ -13,7 +13,11 @@ if sys.version_info > (3, 0):
 
 if sys.version_info > (2, 7):
     CMD = 'ydcommon.management.commands.run_qunit.subprocess.check_output'
-    CMD_VALUE = ('X')
+    CMD_VALUE = ("""X
+<!--
+ Tests completed in 289 milliseconds.
+16 tests of 16 passed, 0 failed.
+-->X""")
 
 
 class QunitTests(TestCase):
