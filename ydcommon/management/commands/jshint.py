@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import sys
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
@@ -56,4 +58,4 @@ class Command(NoArgsCommand):
             if result:
                 sys.stdout.write(result)
             message = 'OK' if code == 0 else 'Error'
-            print '%s! (Checked files: %d)' % (message, len(files))
+            print ('%s! (Checked files: %d)' % (message, len(files)))
