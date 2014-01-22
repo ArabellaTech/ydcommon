@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import os
 import sys
 import re
@@ -76,4 +74,4 @@ class Command(NoArgsCommand):
                     code, result = commands.getstatusoutput(cmd)
                 with open('reports/junit-%s.xml' % filename, 'w') as f:
                     f.write(result)
-                print(filename.title() + ' - ' + RE_RESULTS.findall(result)[0].replace('\n', ' ').strip())
+                sys.stdout.write(filename.title() + ' - ' + RE_RESULTS.findall(result)[0].replace('\n', ' ').strip())
