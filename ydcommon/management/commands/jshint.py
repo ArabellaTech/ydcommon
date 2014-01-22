@@ -47,9 +47,13 @@ class Command(NoArgsCommand):
                     result = subprocess.check_output(cmd,
                                                      stderr=subprocess.STDOUT,
                                                      shell=True)
+                    code = 0
                 except subprocess.CalledProcessError as e:
                     result = e.output
+                    code = e.returncode
             else:
                 code, result = commands.getstatusoutput(cmd)
             if result:
                 sys.stdout.write(result)
+            message = 'OK' if code == 0 else 'Error'
+            print '%s! (Checked files: %d)' % (message, len(files))
