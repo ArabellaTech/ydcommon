@@ -45,6 +45,8 @@ class Command(NoArgsCommand):
         data = RequestContext(request)
         for template_dir in settings.TEMPLATE_DIRS:
             path = os.path.join(template_dir, 'js-tests')
+            if not os.path.exists(path):
+                continue
             files = [f.replace('.html', '') for f in os.listdir(path)
                      if os.path.isfile(os.path.join(path, f))]
             for ignore_file in IGNORE_QUNIT_HTML_FILES:
