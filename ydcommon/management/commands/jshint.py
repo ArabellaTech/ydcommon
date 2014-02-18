@@ -55,5 +55,6 @@ class Command(NoArgsCommand):
                 code, result = commands.getstatusoutput(cmd)
             if result:
                 sys.stdout.write(result)
-            message = 'OK' if code == 0 else 'Error'
-            sys.stdout.write('%s! (Checked files: %d)' % (message, len(files)))
+            if not xml_output:
+                message = 'OK' if code == 0 else 'Error'
+                sys.stdout.write('%s! (Checked files: %d)' % (message, len(files)))
