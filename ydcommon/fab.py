@@ -137,7 +137,7 @@ def command(command):
         Run custom Django management command
     """
     with cd(env.remote_path):
-        sudo(env.python + ' manage.py %s' % env.command, user=env.remote_user)
+        sudo(env.python + ' manage.py %s' % command, user=env.remote_user)
 
 
 def update_cron():
