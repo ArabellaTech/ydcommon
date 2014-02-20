@@ -3,17 +3,16 @@ import sys
 from setuptools import setup, find_packages
 from pkg_resources import require, DistributionNotFound
 
+
 def local_open(fname):
     return open(os.path.join(os.path.dirname(__file__), fname))
 
-readme_file = os.path.abspath(os.path.join(os.path.dirname(__file__),
-    'README.rst'))
+readme_file = os.path.abspath(os.path.join(os.path.dirname(__file__), 'README.rst'))
 
 try:
     long_description = open(readme_file).read()
 except IOError as err:
-    sys.stderr.write("[ERROR] Cannot find file specified as "
-        "long_description (%s)\n" % readme_file)
+    sys.stderr.write("[ERROR] Cannot find file specified as long_description (%s)\n" % readme_file)
     sys.exit(1)
 
 extra_kwargs = {'tests_require': ['mock>1.0']}
@@ -34,9 +33,9 @@ for dist in requirements.readlines():
 setup(
     name='ydcommon',
     version=ydcommon.get_version(),
-    url='https://github.com/YD-Technology/ydcommon',
-    author='YD Technology',
-    author_email='team@ydtechnology.com',
+    url='https://github.com/ArabellaTech/ydcommon',
+    author='Arabella',
+    author_email='team@arabel.la',
     description=ydcommon.__doc__,
     long_description=long_description,
     zip_safe=False,
