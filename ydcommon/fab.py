@@ -114,10 +114,10 @@ def restore_db(path):
     """
         Restore database with given file path (support compressed and not compressed files)
         Usage:
-            fab restore_db ~/dump.sql
-            fab restore_db ~/dump.sql.gz
+            fab restore_db:~/dump.sql
+            fab restore_db:~/dump.sql.gz
     """
-    if file.endswith('.gz'):
+    if path.endswith('.gz'):
         local('gzip -dc %s | python manage.py dbshell' % path)
     else:
         local('python manage.py dbshell < %s ' % path)
