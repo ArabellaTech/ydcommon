@@ -145,3 +145,45 @@ def update_cron():
         Update cron
     """
     sudo('crontab  %sconfig/crontab' % env.remote_path, user=env.remote_user)
+
+
+def setup_server(clear_old=False):
+    """
+        Setup server
+    """
+    pwd = os.path.dirname(os.path.realpath(__file__))
+    project = pwd.split('/')[-1]
+
+    if clear_old:
+        sudo('userdel -r %s' % env.remote_user)
+
+    sudo('useradd --create-home %s' % env.remote_user, user='root')
+    sudo('ssh-keygen -t rsa -P "" -f /home/%s/.ssh/id_rsa' % env.remote_user)
+    sudo('cp -f /home/%s/.ssh/id_rsa.pub ~/key.tmp' % env.remote_user, user='root')
+    key = sudo('cat ~/key.tmp', user='root')
+    #TODO: try github API (Hint: Basic is not working because of 2FA)
+    sudo('rm ~/key.tmp', user='root')
+    print red('Please put following deploy key in GitHub - https://github.com/ArabellaTech/%s/settings/keys' % project)
+    print key
+    prompt(red('Press any key to continue'))
+    sudo('export WORKON_HOME=/home/%s/Envs &&\
+         source /usr/local/bin/virtualenvwrapper_lazy.sh &&\
+         mkvirtualenv %s --no-site-packages' % (env.remote_user, project),
+         warn_only=True)
+    sudo('cd /home/%s/ && git clone git@github.com:ArabellaTech/%s.git www' % (env.remote_user, project))
+    with cd(env.remote_path):
+        sudo('git checkout %s' % env.branch)
+        sudo('cd %s && ln -sf ../config/%s/yd_local_settings.py local_settings.py' % (project, env.environment))
+        sudo(env.pip + ' install -r requirements.txt')
+        sudo(env.python + ' manage.py syncdb --migrate', user=env.remote_user)
+        sudo(env.python + ' manage.py collectstatic -v0 --noinput', user=env.remote_user)
+        sudo(env.python + ' manage.py compress -f', user=env.remote_user)
+
+        params = (env.remote_user, env.environment, env.remote_user)
+        sudo('cd /etc/nginx/sites-enabled && ln -sf /home/%s/www/config/%s/nginx.conf %s.conf' % params, user='root')
+        sudo('cd /etc/supervisor/conf.d/ && ln -sf /home/%s/www/config/%s/supervisord.conf %s.conf' % params,
+             user='root')
+        sudo('/etc/init.d/nginx reload', user='root')
+        sudo('supervisorctl reread && supervisorctl update', user='root')
+
+    update_cron()
