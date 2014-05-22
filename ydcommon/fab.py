@@ -48,7 +48,7 @@ def switch(stage):
     local("git pull")
 
 
-def release_qa():
+def release_qa(quietly=False):
     """
         Release code to QA server
     """
@@ -57,10 +57,11 @@ def release_qa():
     release_name = '%s_%s' % (release_date, name)
     local('git flow release start %s' % release_name)
     local('git flow release publish %s' % release_name)
-    print red('PLEASE DEPLOY CODE: fab deploy:all')
+    if not quietly:
+        print red('PLEASE DEPLOY CODE: fab deploy:all')
 
 
-def update_qa():
+def update_qa(quietly=False):
     """
         Merge code from develop to qa
     """
@@ -68,7 +69,8 @@ def update_qa():
     switch('qa')
     local('git merge --no-edit develop')
     local('git push')
-    print red('PLEASE DEPLOY CODE: fab deploy:all')
+    if not quietly:
+        print red('PLEASE DEPLOY CODE: fab deploy:all')
 
 
 def _check_branch(environment, user):
