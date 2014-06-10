@@ -149,34 +149,44 @@ def update_cron():
     sudo('crontab  %sconfig/crontab' % env.remote_path, user=env.remote_user)
 
 
-def setup_server(clear_old=False):
+def setup_server(clear_old=False, repo="github"):
     """
         Setup server
     """
     pwd = os.path.dirname(os.path.realpath(__file__))
     project = pwd.split('/')[-1]
 
+    if repo == 'github':
+        url_keys = 'https://github.com/ArabellaTech/%s/settings/keys' % project
+        url_clone = 'git@github.com:ArabellaTech/%s.git' % project
+    elif repo == 'bitbucket':
+        url_keys = 'https://bitbucket.org/arabellatech/%s/admin/deploy-keys' % project
+        url_clone = 'git@bitbucket.org:arabellatech/%s.git' % project
+    else:
+        raise NotImplementedError('Unknown repo type')
+
     if clear_old:
         sudo('userdel -r %s' % env.remote_user)
 
-    sudo('useradd --create-home %s' % env.remote_user, user='root')
-    sudo('ssh-keygen -t rsa -P "" -f /home/%s/.ssh/id_rsa' % env.remote_user)
+    sudo('useradd --shell /bin/bash --create-home %s' % env.remote_user, user='root')
+    sudo('ssh-keygen -t rsa -P "" -f /home/%s/.ssh/id_rsa' % env.remote_user, user=env.remote_user)
     sudo('cp -f /home/%s/.ssh/id_rsa.pub ~/key.tmp' % env.remote_user, user='root')
     key = sudo('cat ~/key.tmp', user='root')
-    #TODO: try github API (Hint: Basic is not working because of 2FA)
     sudo('rm ~/key.tmp', user='root')
-    print red('Please put following deploy key in GitHub - https://github.com/ArabellaTech/%s/settings/keys' % project)
+    print red('Please put following deploy key in %s' % url_keys)
     print key
     prompt(red('Press any key to continue'))
     sudo('export WORKON_HOME=/home/%s/Envs &&\
          source /usr/local/bin/virtualenvwrapper_lazy.sh &&\
          mkvirtualenv %s --no-site-packages' % (env.remote_user, project),
-         warn_only=True)
-    sudo('cd /home/%s/ && git clone git@github.com:ArabellaTech/%s.git www' % (env.remote_user, project))
+         warn_only=True, user=env.remote_user)
+    sudo('cd /home/%s/ && git clone %s www' % (env.remote_user, url_clone), user=env.remote_user)
     with cd(env.remote_path):
-        sudo('git checkout %s' % env.branch)
-        sudo('cd %s && ln -sf ../config/%s/yd_local_settings.py local_settings.py' % (project, env.environment))
-        sudo(env.pip + ' install -r requirements.txt')
+        sudo('git checkout %s' % env.branch, user=env.remote_user)
+        sudo('git pull', user=env.remote_user)
+        sudo('cd %s && ln -sf ../config/%s/yd_local_settings.py local_settings.py' % (project, env.environment),
+             user=env.remote_user)
+        sudo(env.pip + ' install -r requirements.txt', user=env.remote_user)
         sudo(env.python + ' manage.py syncdb --migrate', user=env.remote_user)
         sudo(env.python + ' manage.py collectstatic -v0 --noinput', user=env.remote_user)
         sudo(env.python + ' manage.py compress -f', user=env.remote_user)
