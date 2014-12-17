@@ -12,6 +12,10 @@ YD Technology Common libs
    :alt: Bitdeli badge
    :target: https://bitdeli.com/free
 
+System Requirements
+===================
+ - Python 2.7+
+
 Settings
 ========
 ``IGNORE_QUNIT_HTML_FILES`` ignore HTML qunits files

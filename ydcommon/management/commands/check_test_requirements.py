@@ -15,7 +15,7 @@ class Command(NoArgsCommand):
     help = 'Check test requirements'
     errors = []
 
-    def check(self, name, cmd):
+    def check_req(self, name, cmd):
         print('Checking ' + name)
         if sys.version_info > (2, 7):
             try:
@@ -31,8 +31,8 @@ class Command(NoArgsCommand):
         return code, result
 
     def handle_noargs(self, **options):
-        self.check('jshint', 'jshint -v')
-        code, result = self.check('phantomjs', 'phantomjs -v')
+        self.check_req('jshint', 'jshint -v')
+        code, result = self.check_req('phantomjs', 'phantomjs -v')
         if code == 0:
             versions = result.split('.')
             if int(versions[0]) < 1 or int(versions[1]) < 9:
