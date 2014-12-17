@@ -112,6 +112,10 @@ def _get_db():
     return local_file_path
 
 
+def clear_db():
+    local('python manage.py clear_database')
+
+
 def restore_db(path):
     """
         Restore database with given file path (support compressed and not compressed files)
@@ -119,6 +123,7 @@ def restore_db(path):
             fab restore_db:~/dump.sql
             fab restore_db:~/dump.sql.gz
     """
+    clear_db()
     if path.endswith('.gz'):
         local('gzip -dc %s | python manage.py dbshell' % path)
     else:
@@ -131,6 +136,7 @@ def pull_db():
     """
     backup_db()
     local_file_path = _get_db()
+    clear_db()
     local('gzip -dc %s | python manage.py dbshell' % local_file_path)
 
 
