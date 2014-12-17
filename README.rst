@@ -2,15 +2,12 @@
 YD Technology Common libs
 =========================
 
-.. image:: https://travis-ci.org/YD-Technology/ydcommon.png?branch=master
-   :target: http://travis-ci.org/YD-Technology/ydcommon
+.. image:: https://travis-ci.org/ArabellaTech/ydcommon.png?branch=master
+   :target: http://travis-ci.org/ArabellaTech/ydcommon
 
-.. image:: https://coveralls.io/repos/YD-Technology/ydcommon/badge.png?branch=master
-   :target: https://coveralls.io/r/YD-Technology/ydcommon/
+.. image:: https://coveralls.io/repos/ArabellaTech/ydcommon/badge.png?branch=master
+   :target: https://coveralls.io/r/ArabellaTech/ydcommon/
 
-.. image:: https://d2weczhvl823v0.cloudfront.net/YD-Technology/ydcommon/trend.png
-   :alt: Bitdeli badge
-   :target: https://bitdeli.com/free
 
 System Requirements
 ===================
