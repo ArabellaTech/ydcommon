@@ -7,4 +7,3 @@ class YDcommonFileSystemStorage(StaticFilesStorage):
         print self
         print args
         print kwargs
-        return super(YDcommonFileSystemStorage, self).post_process(*args, **kwargs)
