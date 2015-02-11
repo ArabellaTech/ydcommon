@@ -1,7 +1,7 @@
-from django.core.files.storage import FileSystemStorage
+from django.contrib.staticfiles.storage import StaticFilesStorage
 
 
-class YDcommonFileSystemStorage(FileSystemStorage):
+class YDcommonFileSystemStorage(StaticFilesStorage):
 
     def post_process(self, *args, **kwargs):
         print self
