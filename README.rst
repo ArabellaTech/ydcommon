@@ -20,6 +20,20 @@ Settings
 ``STATICFILES_STORAGE = "ydcommon.file_system_storage.YDcommonFileSystemStorage"`` - adds additional compression for all images in staticfiles directories. IMPORTANT: for this to work you need to add 'image_diet' to your INSTALLED APPS
 ``image_died`` added into installed apps - required by "ydcommon.file_system_storage.YDcommonFileSystemStorage"
 
+
+Image_diet addons
+========================
+Image_diet requires following libs:
+
+- jpegoptim
+- jpegtran
+- gifsicle
+- optipng
+- advpng
+- pngcrush
+
+At least some of those should be installed to take advantage of compression. On OSX those can be installed via brew, on linux via your distribution package management system. Important: on ubuntu advpng and jpegtran are not available in standard repositiories. 
+
 Views
 =====
 ``QunitTestsView`` Qunit tests (stuff permission required), example entry in urls.py:
