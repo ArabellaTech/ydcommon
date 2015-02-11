@@ -23,6 +23,7 @@ Settings
 
 Image_diet addons
 ========================
+Docs: https://github.com/samastur/image-diet
 Image_diet requires following libs:
 
 - jpegoptim
@@ -32,7 +33,9 @@ Image_diet requires following libs:
 - advpng
 - pngcrush
 
-At least some of those should be installed to take advantage of compression. On OSX those can be installed via brew, on linux via your distribution package management system. Important: on ubuntu advpng and jpegtran are not available in standard repositiories. 
+At least some of those should be installed to take advantage of compression. On OSX those can be installed via brew, on linux via your distribution package management system. Important: on ubuntu advpng and jpegtran are not available in standard repositiories. Not available extensions should be disabled in settings.py:
+
+`DIET_JPEGOPTIM = False`
 
 Views
 =====
