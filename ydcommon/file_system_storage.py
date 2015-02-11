@@ -8,7 +8,8 @@ class YDcommonFileSystemStorage(StaticFilesStorage):
     def post_process(self, files, *args, **kwargs):
         # print files
         results = []
-        if 'image_diet' in settings.INSTALLED_APPS and settings.YDCOMMON_COMPRESS_IMAGES:
+        compress_images = getattr(settings, 'YDCOMMON_COMPRESS_STATIC_IMAGES', False)
+        if 'image_diet' in settings.INSTALLED_APPS and compress_images:
             from image_diet import squeeze
             for f in files:
                 processed_file = squeeze(os.path.join(settings.STATIC_ROOT, f))
