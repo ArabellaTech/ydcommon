@@ -17,6 +17,7 @@ Settings
 ========
 ``IGNORE_QUNIT_HTML_FILES`` ignore HTML qunits files
 ``JSHINT_FILES_FIND`` JS Hint search files grep. Default ``-name "*.js" | xargs grep -l '/\*jslint' | grep -v libs``
+``STATICFILES_STORAGE = "ydcommon.file_system_storage.YDcommonFileSystemStorage"`` - adds additional compression for all images in staticfiles directories
 
 Views
 =====
