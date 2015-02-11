@@ -20,7 +20,7 @@ Settings
 ``STATICFILES_STORAGE = "ydcommon.file_system_storage.YDcommonFileSystemStorage"`` - adds additional compression for all images in staticfiles directories. IMPORTANT: for this to work you need to add 'image_diet' to your INSTALLED APPS
 ``image_died`` added into installed apps - required by "ydcommon.file_system_storage.YDcommonFileSystemStorage"
 
-``YDCOMMON_COMPRESS_STATIC_IMAGES`` - compress static images when true. Collectstatic takes very long with this, set False for local and dev. 
+``YDCOMMON_COMPRESS_STATIC_IMAGES`` - compress static images when true. Collectstatic takes very long with this, set False for local and dev. Defaults to False.
 
 
 Image_diet addons
@@ -38,6 +38,13 @@ Image_diet requires following libs:
 At least some of those should be installed to take advantage of compression. On OSX those can be installed via brew, on linux via your distribution package management system. Important: on ubuntu advpng and jpegtran are not available in standard repositiories. Not available extensions should be disabled in settings.py:
 
 `DIET_JPEGOPTIM = False`
+
+You can check available options by:
+::
+    
+    ./manage.py check_diet_tools
+
+It will output configuration options to put in your settings.py file if any of compression tools is not available.
 
 Views
 =====
