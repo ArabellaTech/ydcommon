@@ -18,7 +18,7 @@ Settings
 ``IGNORE_QUNIT_HTML_FILES`` ignore HTML qunits files
 ``JSHINT_FILES_FIND`` JS Hint search files grep. Default ``-name "*.js" | xargs grep -l '/\*jslint' | grep -v libs``
 ``STATICFILES_STORAGE = "ydcommon.file_system_storage.YDcommonFileSystemStorage"`` - adds additional compression for all images in staticfiles directories. IMPORTANT: for this to work you need to add 'image_diet' to your INSTALLED APPS
-``image_died`` added into installed apps - required by "ydcommon.file_system_storage.YDcommonFileSystemStorage"
+``image_diet`` added into installed apps - required by "ydcommon.file_system_storage.YDcommonFileSystemStorage"
 
 ``YDCOMMON_COMPRESS_STATIC_IMAGES`` - compress static images when true. Collectstatic takes very long with this, set False for local and dev. Defaults to False.
 
