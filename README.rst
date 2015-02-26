@@ -42,40 +42,51 @@ At least some of those should be installed to take advantage of compression. On 
 `DIET_JPEGOPTIM = False`
 
 You can check available options by:
+
 ::
-    
+
     ./manage.py check_diet_tools
 
 It will output configuration options to put in your settings.py file if any of compression tools is not available.
 
 Views
 =====
+
 ``QunitTestsView`` Qunit tests (stuff permission required), example entry in urls.py:
+
 ::
 
     url(r"^js-tests/(?P<path>.*)", 'ydcommon.views.qunit_view', name='quinit'),
 
 Commands
 ========
-Checking requirement for tests
+
+Checking requirement for tests:
+
 ::
+
     ./manage.py check_test_requirements
 
 Running Qunit tests
+
 ::
 
     ./manage.py run_qunit
 
 Running JS Hint
+
 ::
 
     ./manage.py jshint
 
 Clear database - drop all tables
+
 ::
 
     ./manage.py clear_database
 
 Dump database
+
 ::
+
     ./manage.py dump_database
