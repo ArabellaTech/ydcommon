@@ -8,7 +8,10 @@ class YDCommonFileSystemStorage(StaticFilesStorage):
     def post_process(self, files, *args, **kwargs):
         results = []
         compress_images = getattr(settings, 'YDCOMMON_COMPRESS_STATIC_IMAGES', False)
-        if 'image_diet' in settings.INSTALLED_APPS and compress_images:
+        if compress_images:
+            if 'image_diet' not in settings.INSTALLED_APPS:
+                raise NotImplementedError("You need to install image_diet to use YDCOMMON_COMPRESS_STATIC_IMAGES")
+
             from image_diet import squeeze
             for f in files:
                 processed_file = squeeze(os.path.join(settings.STATIC_ROOT, f))
