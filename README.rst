@@ -29,7 +29,7 @@ Docs: https://github.com/samastur/image-diet
 Compressess static images during collectstatic.
 
 Image_diet requires following libs:
-y
+
 - jpegoptim
 - jpegtran
 - gifsicle
