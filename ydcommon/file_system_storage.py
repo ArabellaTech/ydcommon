@@ -3,10 +3,9 @@ from django.contrib.staticfiles.storage import StaticFilesStorage
 from django.conf import settings
 
 
-class YDcommonFileSystemStorage(StaticFilesStorage):
+class YDCommonFileSystemStorage(StaticFilesStorage):
 
     def post_process(self, files, *args, **kwargs):
-        # print files
         results = []
         compress_images = getattr(settings, 'YDCOMMON_COMPRESS_STATIC_IMAGES', False)
         if 'image_diet' in settings.INSTALLED_APPS and compress_images:
