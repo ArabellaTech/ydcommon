@@ -26,7 +26,7 @@ Image_diet addons
 ========================
 Docs: https://github.com/samastur/image-diet
 
-Compressess static images during deployment.
+Compressess static images during collectstatic.
 
 Image_diet requires following libs:
 
