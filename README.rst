@@ -25,7 +25,9 @@ Settings
 Image_diet addons
 ========================
 Docs: https://github.com/samastur/image-diet
+
 Compressess static images during deployment.
+
 Image_diet requires following libs:
 
 - jpegoptim
