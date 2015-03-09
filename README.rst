@@ -17,36 +17,6 @@ Settings
 ========
 - ``IGNORE_QUNIT_HTML_FILES`` ignore HTML qunits files
 - ``JSHINT_FILES_FIND`` JS Hint search files grep. Default ``-name "*.js" | xargs grep -l '/\*jslint' | grep -v libs``
-- ``STATICFILES_STORAGE = "ydcommon.file_system_storage.YDCommonFileSystemStorage"`` - adds additional compression for all images in staticfiles directories. IMPORTANT: for this to work you need to add 'image_diet' to your INSTALLED APPS
-- ``image_diet`` added into installed apps - required by "ydcommon.file_system_storage.YDCommonFileSystemStorage"
-- ``YDCOMMON_COMPRESS_STATIC_IMAGES`` - compress static images when true. Collectstatic takes very long with this, set False for local and dev. Defaults to False.
-
-
-Image_diet addons
-========================
-Docs: https://github.com/samastur/image-diet
-
-Compressess static images during collectstatic.
-
-Image_diet requires following libs:
-
-- jpegoptim
-- jpegtran
-- gifsicle
-- optipng
-- advpng
-- pngcrush
-
-At least some of those should be installed to take advantage of compression. On OSX those can be installed via brew, on linux via your distribution package management system. Important: on ubuntu advpng and jpegtran are not available in standard repositiories. Not available extensions should be disabled in settings.py:
-
-`DIET_JPEGOPTIM = False`
-
-You can check available options by:
-::
-    
-    ./manage.py check_diet_tools
-
-It will output configuration options to put in your settings.py file if any of compression tools is not available.
 
 Views
 =====
