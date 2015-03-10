@@ -4,6 +4,7 @@
 MANIFEST
 *.egg
 *.egg-info
+.eggs
 dist
 build
 eggs
