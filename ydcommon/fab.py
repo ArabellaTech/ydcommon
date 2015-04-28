@@ -73,13 +73,14 @@ def update_qa(quietly=False):
         print red('PLEASE DEPLOY CODE: fab deploy:all')
 
 
-def _check_branch(environment, user):
+def _check_branch(environment, user, change=False):
     if environment == 'qa':
         local_branch = _get_branch_name()
         remote_branch = _get_branch_name(False)
         if local_branch != remote_branch:
-            change = confirm(red('Branch on server is different, do you want to checkout %s ?' % local_branch),
-                             default=True)
+            if not change:
+                change = confirm(red('Branch on server is different, do you want to checkout %s ?' % local_branch),
+                                 default=True)
             if change:
                 sudo('git checkout %s' % local_branch, user=user)
 
