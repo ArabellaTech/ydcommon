@@ -53,11 +53,12 @@ options."""
             if os.name == 'nt':
                 sys.exit(os.system(" ".join(cmd_args)))
             else:
+                print 'ala ma kota'
+                print cmd_args
                 os.execvp(DUMP_COMMAND_NAME, cmd_args)
         except OSError:
             # Note that we're assuming OSError means that the client program
             # isn't installed. There's a possibility OSError would be raised
             # for some other reason, in which case this error message would be
             # inaccurate. Still, this message catches the common case.
-            raise CommandError('You appear not to have the %r program installed or on your path.' % \
-                DUMP_COMMAND_NAME)
+            raise CommandError('You appear not to have the %r program installed or on your path.' % DUMP_COMMAND_NAME)
