@@ -47,7 +47,7 @@ options."""
         else:
             tables = connection.introspection.get_table_list(connection.cursor())
 
-        cmd_args += ["--extended-insert", db] + tables
+        cmd_args += ["--extended-insert", db] + [str(t.name) for t in tables]
 
         try:
             if os.name == 'nt':
