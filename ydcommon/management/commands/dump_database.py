@@ -53,8 +53,6 @@ options."""
             if os.name == 'nt':
                 sys.exit(os.system(" ".join(cmd_args)))
             else:
-                print 'ala ma kota'
-                print cmd_args
                 os.execvp(DUMP_COMMAND_NAME, cmd_args)
         except OSError:
             # Note that we're assuming OSError means that the client program
