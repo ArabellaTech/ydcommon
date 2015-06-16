@@ -1,4 +1,5 @@
 import os
+import django
 import shlex
 import sys
 from django.core.management.base import BaseCommand, CommandError
@@ -47,7 +48,10 @@ options."""
         else:
             tables = connection.introspection.get_table_list(connection.cursor())
 
-        cmd_args += ["--extended-insert", db] + [str(t.name) for t in tables]
+        if django.VERSION >= (1, 8):
+            cmd_args += ["--extended-insert", db] + [str(t.name) for t in tables]
+        else:
+            cmd_args += ["--extended-insert", db] + tables
 
         try:
             if os.name == 'nt':
