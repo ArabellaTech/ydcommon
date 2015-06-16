@@ -1,4 +1,5 @@
 import os
+import django
 
 DATABASE_ENGINE = 'sqlite3'
 
@@ -31,7 +32,11 @@ STATICFILES_DIRS = [
 SECRET_KEY = 'fake'
 
 ROOT_URLCONF = 'test_project.urls'
-TEST_RUNNER = 'django.test.simple.DjangoTestSuiteRunner'
+
+if django.VERSION >= (1, 8):
+    TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+else:
+    TEST_RUNNER = 'django.test.simple.DjangoTestSuiteRunner'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
