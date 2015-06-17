@@ -2,7 +2,7 @@
 YD Technology common libraries
 """
 
-VERSION = (0, 1, 32)
+VERSION = (0, 1, 33)
 
 __version__ = '.'.join((str(each) for each in VERSION[:4]))
 
