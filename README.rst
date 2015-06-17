@@ -11,7 +11,7 @@ YD Technology Common libs
 
 System Requirements
 ===================
- - Python 2.7+
+- Python 2.7+
 
 Settings
 ========
@@ -47,6 +47,14 @@ Running JS Hint
 ::
 
     ./manage.py jshint
+
+
+Running JS Hint with custom directory
+
+::
+
+    ./manage.py jshint --dir=my/custom/dir
+
 
 Clear database - drop all tables
 

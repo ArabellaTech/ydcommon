@@ -18,12 +18,20 @@ class Command(NoArgsCommand):
                     default=False,
                     dest='xml_output',
                     help='Render as XML'),
+        make_option('-d', '--dir', action='store',
+                    default=None,
+                    dest='search_dir',
+                    help='Search files in directory'),
     )
     help = 'Render JSHint'
 
-    def handle_noargs(self, xml_output, **options):
+    def handle_noargs(self, xml_output, search_dir=None, **options):
         files = []
-        for path in settings.STATICFILES_DIRS:
+        if search_dir is not None:
+            search_dir = [search_dir]
+        else:
+            search_dir = settings.STATICFILES_DIRS
+        for path in search_dir:
             cmd = "find %s %s" % (path, JSHINT_FILES_FIND)
             if sys.version_info > (2, 7):
                 try:
