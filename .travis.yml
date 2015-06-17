@@ -22,9 +22,9 @@ script:
 matrix:
   exclude:
     - python: "3.3"
-      env: DJANGO="django==1.4 --use-mirrors"
+      env: DJANGO="django>=1.4,<1.5 --use-mirrors"
     - python: "3.4"
-      env: DJANGO="django==1.4 --use-mirrors"
+      env: DJANGO="django>=1.4,<1.5 --use-mirrors"
 
 after_success:
   - coverage report --omit="ydcommon/tests/*" -m
