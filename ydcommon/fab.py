@@ -1,6 +1,7 @@
 import os
 import base64
 import uuid
+import django
 
 from datetime import datetime
 
@@ -192,7 +193,10 @@ def setup_server(clear_old=False, repo="github"):
         sudo('cd %s && ln -sf ../config/%s/yd_local_settings.py local_settings.py' % (env.app_dir, env.environment),
              user=env.remote_user)
         sudo(env.pip + ' install -r requirements.txt', user=env.remote_user)
-        sudo(env.python + ' manage.py syncdb --migrate', user=env.remote_user)
+        if django.VERSION >= (1, 8):
+            sudo(env.python + ' manage.py migrate', user=env.remote_user)
+        else:
+            sudo(env.python + ' manage.py syncdb --migrate', user=env.remote_user)
         sudo(env.python + ' manage.py collectstatic -v0 --noinput', user=env.remote_user)
         sudo(env.python + ' manage.py compress -f', user=env.remote_user)
 
