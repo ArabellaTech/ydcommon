@@ -166,7 +166,7 @@ def setup_server(clear_old=False, repo="github"):
         url_keys = 'https://github.com/ArabellaTech/%s/settings/keys' % env.app_dir
         url_clone = 'git@github.com:ArabellaTech/%s.git' % env.app_dir
     elif repo == 'bitbucket':
-        url_keys = 'https://bitbucket.org/arabellatech/%s/admin/deploy-keys' % env.app_dir
+        url_keys = 'https://bitbucket.org/arabellatech/%s/admin/deploy-keys/' % env.app_dir
         url_clone = 'git@bitbucket.org:arabellatech/%s.git' % env.app_dir
     else:
         raise NotImplementedError('Unknown repo type')
