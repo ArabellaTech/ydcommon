@@ -5,10 +5,11 @@ python:
   - "3.4"
 
 env:
-  - DJANGO="django==1.5 --use-mirrors"
-  - DJANGO="django==1.4 --use-mirrors"
-  - DJANGO="django==1.6 --use-mirrors"
-  - DJANGO="django==1.7 --use-mirrors"
+  - DJANGO="django>=1.4<1.5 --use-mirrors"
+  - DJANGO="django>=1.5<1.6 --use-mirrors"
+  - DJANGO="django>=1.6<1.7 --use-mirrors"
+  - DJANGO="django>=1.7<1.8 --use-mirrors"
+  - DJANGO="django>=1.8<1.9 --use-mirrors"
 
 install:
  - pip install -r requirements.txt --use-mirrors
