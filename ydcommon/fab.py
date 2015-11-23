@@ -112,6 +112,10 @@ def _get_db():
     return local_file_path
 
 
+def clear_db():
+    local('python manage.py clear_database')
+
+
 def restore_db(path):
     """
         Restore database with given file path (support compressed and not compressed files)
@@ -119,6 +123,7 @@ def restore_db(path):
             fab restore_db:~/dump.sql
             fab restore_db:~/dump.sql.gz
     """
+    clear_db()
     if path.endswith('.gz'):
         local('gzip -dc %s | python manage.py dbshell' % path)
     else:
@@ -131,6 +136,7 @@ def pull_db():
     """
     backup_db()
     local_file_path = _get_db()
+    clear_db()
     local('gzip -dc %s | python manage.py dbshell' % local_file_path)
 
 
@@ -153,15 +159,13 @@ def setup_server(clear_old=False, repo="github"):
     """
         Setup server
     """
-    pwd = os.path.dirname(os.path.realpath(__file__))
-    project = pwd.split('/')[-1]
 
     if repo == 'github':
-        url_keys = 'https://github.com/ArabellaTech/%s/settings/keys' % project
-        url_clone = 'git@github.com:ArabellaTech/%s.git' % project
+        url_keys = 'https://github.com/ArabellaTech/%s/settings/keys' % env.app_dir
+        url_clone = 'git@github.com:ArabellaTech/%s.git' % env.app_dir
     elif repo == 'bitbucket':
-        url_keys = 'https://bitbucket.org/arabellatech/%s/admin/deploy-keys' % project
-        url_clone = 'git@bitbucket.org:arabellatech/%s.git' % project
+        url_keys = 'https://bitbucket.org/arabellatech/%s/admin/deploy-keys' % env.app_dir
+        url_clone = 'git@bitbucket.org:arabellatech/%s.git' % env.app_dir
     else:
         raise NotImplementedError('Unknown repo type')
 
@@ -178,13 +182,13 @@ def setup_server(clear_old=False, repo="github"):
     prompt(red('Press any key to continue'))
     sudo('export WORKON_HOME=/home/%s/Envs &&\
          source /usr/local/bin/virtualenvwrapper_lazy.sh &&\
-         mkvirtualenv %s --no-site-packages' % (env.remote_user, project),
+         mkvirtualenv %s --no-site-packages' % (env.remote_user, env.app_dir),
          warn_only=True, user=env.remote_user)
     sudo('cd /home/%s/ && git clone %s www' % (env.remote_user, url_clone), user=env.remote_user)
     with cd(env.remote_path):
         sudo('git checkout %s' % env.branch, user=env.remote_user)
         sudo('git pull', user=env.remote_user)
-        sudo('cd %s && ln -sf ../config/%s/yd_local_settings.py local_settings.py' % (project, env.environment),
+        sudo('cd %s && ln -sf ../config/%s/yd_local_settings.py local_settings.py' % (env.app_dir, env.environment),
              user=env.remote_user)
         sudo(env.pip + ' install -r requirements.txt', user=env.remote_user)
         sudo(env.python + ' manage.py syncdb --migrate', user=env.remote_user)

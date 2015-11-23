@@ -2,20 +2,21 @@
 YD Technology Common libs
 =========================
 
-.. image:: https://travis-ci.org/YD-Technology/ydcommon.png?branch=master
-   :target: http://travis-ci.org/YD-Technology/ydcommon
+.. image:: https://travis-ci.org/ArabellaTech/ydcommon.png?branch=master
+   :target: http://travis-ci.org/ArabellaTech/ydcommon
 
-.. image:: https://coveralls.io/repos/YD-Technology/ydcommon/badge.png?branch=master
-   :target: https://coveralls.io/r/YD-Technology/ydcommon/
+.. image:: https://coveralls.io/repos/ArabellaTech/ydcommon/badge.png?branch=master
+   :target: https://coveralls.io/r/ArabellaTech/ydcommon/
 
-.. image:: https://d2weczhvl823v0.cloudfront.net/YD-Technology/ydcommon/trend.png
-   :alt: Bitdeli badge
-   :target: https://bitdeli.com/free
+
+System Requirements
+===================
+ - Python 2.7+
 
 Settings
 ========
-``IGNORE_QUNIT_HTML_FILES`` ignore HTML qunits files
-``JSHINT_FILES_FIND`` JS Hint search files grep. Default ``-name "*.js" | xargs grep -l '/\*jslint' | grep -v libs``
+- ``IGNORE_QUNIT_HTML_FILES`` ignore HTML qunits files
+- ``JSHINT_FILES_FIND`` JS Hint search files grep. Default ``-name "*.js" | xargs grep -l '/\*jslint' | grep -v libs``
 
 Views
 =====

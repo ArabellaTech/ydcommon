@@ -31,3 +31,11 @@ STATICFILES_DIRS = [
 SECRET_KEY = 'fake'
 
 ROOT_URLCONF = 'test_project.urls'
+TEST_RUNNER = 'django.test.simple.DjangoTestSuiteRunner'
+
+MIDDLEWARE_CLASSES = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+)
