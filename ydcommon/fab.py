@@ -192,7 +192,7 @@ def setup_server(clear_old=False, repo="github"):
         sudo('git pull', user=env.remote_user)
         sudo('cd %s && ln -sf ../config/%s/yd_local_settings.py local_settings.py' % (env.app_dir, env.environment),
              user=env.remote_user)
-        sudo(env.pip + ' install -r requirements.txt', user=env.remote_user)
+        sudo(env.pip + ' install -r requirements.txt --no-cache-dir', user=env.remote_user)
         if django.VERSION >= (1, 8):
             sudo(env.python + ' manage.py migrate', user=env.remote_user)
         else:
