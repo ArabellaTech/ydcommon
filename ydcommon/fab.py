@@ -197,6 +197,18 @@ def setup_server(clear_old=False, repo="github"):
             sudo(env.python + ' manage.py migrate', user=env.remote_user)
         else:
             sudo(env.python + ' manage.py syncdb --migrate', user=env.remote_user)
+
+        # try installing npm
+        # install npm modules
+        sudo('/bin/bash ./scripts/fab_build_bower_npm.sh ' + env.remote_user, user=env.remote_user, warn_only=True)
+        # fix angular for webkit
+
+        sudo('/home/' + env.remote_user + '/www/node_modules/.bin/webkit-assign /home/' + env.remote_user +
+             '/www/nutrimom/static/libs/bower_components/angular/angular.js', user=env.remote_user, warn_only=True)
+
+        # build js
+        sudo('grunt build-js', warn_only=True)
+
         sudo(env.python + ' manage.py collectstatic -v0 --noinput', user=env.remote_user)
         sudo(env.python + ' manage.py compress -f', user=env.remote_user)
 
