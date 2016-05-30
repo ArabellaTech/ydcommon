@@ -7,6 +7,10 @@ YD Technology Common libs
 
 .. image:: https://coveralls.io/repos/ArabellaTech/ydcommon/badge.png?branch=master
    :target: https://coveralls.io/r/ArabellaTech/ydcommon/
+   
+.. image:: https://requires.io/github/ArabellaTech/ydcommon/requirements.svg?branch=master
+     :target: https://requires.io/github/ArabellaTech/ydcommon/requirements/?branch=master
+     :alt: Requirements Status
 
 
 System Requirements
