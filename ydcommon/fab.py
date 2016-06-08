@@ -1,16 +1,21 @@
-import os
 import base64
-import uuid
 import django
+import os
+import uuid
 
 from datetime import datetime
 
 from django.template.defaultfilters import slugify as _slugify
 
-from fabric.api import local, sudo, run, env, cd, get
-from fabric.operations import prompt
+from fabric.api import cd
+from fabric.api import env
+from fabric.api import get
+from fabric.api import local
+from fabric.api import run
+from fabric.api import sudo
 from fabric.colors import red
 from fabric.contrib.console import confirm
+from fabric.operations import prompt
 
 
 def _get_branch_name(on_local=True):
@@ -163,11 +168,11 @@ def setup_server(clear_old=False, repo="github"):
     """
 
     if repo == 'github':
-        url_keys = 'https://github.com/ArabellaTech/%s/settings/keys' % env.app_dir
-        url_clone = 'git@github.com:ArabellaTech/%s.git' % env.app_dir
+        url_keys = 'https://github.com/ArabellaTech/%s/settings/keys' % env.repo_name
+        url_clone = 'git@github.com:ArabellaTech/%s.git' % env.repo_name
     elif repo == 'bitbucket':
-        url_keys = 'https://bitbucket.org/arabellatech/%s/admin/deploy-keys/' % env.app_dir
-        url_clone = 'git@bitbucket.org:arabellatech/%s.git' % env.app_dir
+        url_keys = 'https://bitbucket.org/arabellatech/%s/admin/deploy-keys/' % env.repo_name
+        url_clone = 'git@bitbucket.org:arabellatech/%s.git' % env.repo_name
     else:
         raise NotImplementedError('Unknown repo type')
 
