@@ -1,7 +1,10 @@
 import os
 import sys
-from setuptools import setup, find_packages
-from pkg_resources import require, DistributionNotFound
+
+from pkg_resources import DistributionNotFound
+from pkg_resources import require
+from setuptools import find_packages
+from setuptools import setup
 
 
 def local_open(fname):
@@ -48,6 +51,10 @@ setup(
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
     ],
     **extra_kwargs
 )
