@@ -3,12 +3,9 @@ python:
   - "2.7"
   - "3.3"
   - "3.4"
+  - "3.5"
 
 env:
-  - DJANGO="django>=1.4,<1.5"
-  - DJANGO="django>=1.5,<1.6"
-  - DJANGO="django>=1.6,<1.7"
-  - DJANGO="django>=1.7,<1.8"
   - DJANGO="django>=1.8,<1.9"
 
 install:
@@ -18,13 +15,6 @@ install:
 
 script:
   - coverage run --source=ydcommon setup.py test
-
-matrix:
-  exclude:
-    - python: "3.3"
-      env: DJANGO="django>=1.4,<1.5"
-    - python: "3.4"
-      env: DJANGO="django>=1.4,<1.5"
 
 after_success:
   - coverage report --omit="ydcommon/tests/*" -m

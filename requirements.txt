@@ -1,2 +1,2 @@
-Django >= 1.4
-Fabric>=1.10.0
+Django >= 1.8
+Fabric3>=1.11.1.post1
