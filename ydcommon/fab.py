@@ -11,6 +11,7 @@ from fabric.api import cd
 from fabric.api import env
 from fabric.api import get
 from fabric.api import local
+from fabric.api import put
 from fabric.api import run
 from fabric.api import sudo
 from fabric.colors import red
@@ -93,7 +94,7 @@ def _check_branch(environment, user, change=False):
 
 def _sql_paths(*args):
     args = [str(arg) for arg in args]
-    args.append(_get_branch_name())
+    args.append(_slugify(_get_branch_name(False)))
     return _slugify('-'.join(args)) + '.sql.gz'
 
 
@@ -113,7 +114,7 @@ def _get_db():
     with cd(env.remote_path):
         file_path = '/tmp/' + _sql_paths('remote', base64.urlsafe_b64encode(uuid.uuid4().bytes).replace('=', ''))
         run(env.python + ' manage.py dump_database | gzip > ' + file_path)
-    local_file_path = './backups/' + _sql_paths('remote_', datetime.now())
+        local_file_path = './backups/' + _sql_paths('remote', datetime.now())
     get(file_path, local_file_path)
     run('rm ' + file_path)
     return local_file_path
@@ -185,7 +186,7 @@ def setup_server(clear_old=False, repo="github"):
     key = sudo('cat ~/key.tmp', user='root')
     sudo('rm ~/key.tmp', user='root')
     print red('Please put following deploy key in %s' % url_keys)
-    print key
+    print (key)
     prompt(red('Press any key to continue'))
     sudo('export WORKON_HOME=/home/%s/Envs &&\
          source /usr/local/bin/virtualenvwrapper_lazy.sh &&\
@@ -225,3 +226,30 @@ def setup_server(clear_old=False, repo="github"):
         sudo('supervisorctl reread && supervisorctl update', user='root')
 
     update_cron()
+
+
+def copy_db(source_env, destination_env):
+    """
+        Copies Db betweem servers, ie develop to qa.
+        Requires _set_copy_env() defined in project with:
+        source hosts, users etc,
+        destination hosts, users, etc.
+        Raises exception if _set_copy_env not defined.
+    """
+    env.update(source_env)
+    local_file_path = _get_db()
+
+    # put the file on external file system
+    # clean external db
+    # load database into external file system
+    env.update(destination_env)
+
+    with cd(env.remote_path):
+        sudo('mkdir -p backups', user=env.remote_user)
+        sudo(env.python + ' manage.py dump_database | gzip > backups/' + _sql_paths('local', datetime.now()))
+        put(local_file_path, 'backups', use_sudo=True)
+        sudo(env.python + ' manage.py clear_database', user=env.remote_user)
+        if local_file_path.endswith('.gz'):  # the path is the same here and there
+            sudo('gzip -dc %s | %s manage.py dbshell' % (local_file_path, env.python), user=env.remote_user)
+        else:
+            sudo('%s manage.py dbshell < %s ' % (env.python, local_file_path), user=env.remote_user)
