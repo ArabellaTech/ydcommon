@@ -231,10 +231,52 @@ def setup_server(clear_old=False, repo="github"):
 def copy_db(source_env, destination_env):
     """
         Copies Db betweem servers, ie develop to qa.
-        Requires _set_copy_env() defined in project with:
-        source hosts, users etc,
-        destination hosts, users, etc.
-        Raises exception if _set_copy_env not defined.
+        Should be called by function from function defined in project fabfile.
+        Example usage:
+
+        def copy_db_between_servers(source_server, destination_server):
+
+            source_env = {}
+            destination_env = {}
+
+            def populate_env_dict(server, local_env):
+                app_dir = 'nutrimom'
+                if server == 'nm-dev':
+                    user = 'nutrimom-dev'
+                    prefix = "dev"
+                    environment = 'devel'
+                    host_string = 'dev.arabel.la'
+                elif server == 'nm-qa':
+                    user = 'nutrimom-qa'
+                    prefix = "qa"
+                    environment = 'qa'
+                    host_string = 'qa.arabel.la'
+                elif server.startswith('nm-f'):
+                    if server in ['nm-f1', 'nm-f2', 'nm-f3', 'nm-f4', 'nm-f5']:
+                        user = 'nutrimom-' + server.split('-')[1]
+                        prefix = user.split('-')[1]
+                        environment = prefix
+                        host_string = 'dev.arabel.la'
+                else:
+                    print ("supported params: nm-dev, nm-qa, nm-fx")
+                    sys.exit()
+
+                local_env['app_dir'] = app_dir
+                local_env['remote_user'] = user
+                local_env['remote_path'] = '/home/%s/www/' % (user)
+                local_env['dir'] = '/home/%s/Envs/%s' % (user, app_dir)
+                local_env['python'] = '/home/%s/Envs/%s/bin/python' % (user, app_dir)
+                local_env['pip'] = '/home/%s/Envs/%s/bin/pip' % (user, app_dir)
+                local_env['prefix'] = prefix
+                local_env['environment'] = environment
+                local_env['host_string'] = host_string
+                local_env['is_feature'] = False
+                return local_env
+
+            source_env = populate_env_dict(source_server, source_env)
+            destination_env = populate_env_dict(destination_server, destination_env)
+
+            copy_db(source_env, destination_env)
     """
     env.update(source_env)
     local_file_path = _get_db()
