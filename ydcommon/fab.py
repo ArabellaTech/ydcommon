@@ -295,3 +295,24 @@ def copy_db(source_env, destination_env):
             sudo('gzip -dc %s | %s manage.py dbshell' % (local_file_path, env.python), user=env.remote_user)
         else:
             sudo('%s manage.py dbshell < %s ' % (env.python, local_file_path), user=env.remote_user)
+
+
+def copy_s3_bucket(src_bucket_name, src_bucket_secret_key, src_bucket_access_key,
+                   dst_bucket_name, dst_bucket_secret_key, dst_bucket_access_key):
+    """ Copy S3 bucket directory with CMS data between environments. Operations are done on server. """
+    with cd(env.remote_path):
+        tmp_dir = "s3_tmp"
+        sudo('rm -rf %s' % tmp_dir, warn_only=True, user=env.remote_user)
+        sudo('mkdir %s' % tmp_dir, user=env.remote_user)
+        sudo('s3cmd --recursive get s3://%s/upload/ %s --secret_key=%s --access_key=%s' % (
+            src_bucket_name, tmp_dir, src_bucket_secret_key, src_bucket_access_key),
+            user=env.remote_user)
+        sudo('s3cmd --recursive put %s/ s3://%s/upload/ --secret_key=%s --access_key=%s' % (
+            tmp_dir, dst_bucket_name, dst_bucket_secret_key, dst_bucket_access_key),
+            user=env.remote_user)
+
+        sudo('s3cmd setacl s3://%s/upload --acl-public --recursive --secret_key=%s --access_key=%s' % (
+             dst_bucket_name, dst_bucket_secret_key, dst_bucket_access_key),
+             user=env.remote_user)
+        # cleanup
+        sudo('rm -rf %s' % tmp_dir, warn_only=True, user=env.remote_user)
