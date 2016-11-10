@@ -204,6 +204,8 @@ def setup_server(clear_old=False, repo="github"):
         else:
             sudo(env.python + ' manage.py syncdb --migrate', user=env.remote_user)
 
+        sudo('cd config && ln -sf %s/logrotate.conf logrotate.conf' % (env.environment))
+
         # try installing npm
         # install npm modules
         # sudo('/bin/bash ./scripts/fab_build_bower_npm.sh ' + env.remote_user, user=env.remote_user, warn_only=True)
