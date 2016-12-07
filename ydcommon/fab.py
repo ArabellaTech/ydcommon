@@ -92,6 +92,23 @@ def _check_branch(environment, user, change=False):
                 sudo('git checkout %s' % local_branch, user=user)
 
 
+def _check_feature_branch(full, environment, user):
+    local_branch = _get_branch_name()
+    remote_branch = _get_branch_name(False)
+    if local_branch != remote_branch:
+        if full:
+            red('Current branch is %s. Your branch is %s. Switching.'
+                % (remote_branch, local_branch))
+            change = True
+        else:
+            change = confirm(red('Current branch is %s. Your branch is %s, do you want to change?'
+                                 % (remote_branch, local_branch)),
+                             default=True)
+        if change:
+            sudo('git checkout %s' % local_branch, user=user)
+            sudo('git pull', user=env.remote_user)
+
+
 def _sql_paths(*args):
     args = [str(arg) for arg in args]
     args.append(_slugify(_get_branch_name(False)))
