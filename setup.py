@@ -37,7 +37,7 @@ setup(
     url='https://github.com/ArabellaTech/ydcommon',
     author='Arabella',
     author_email='team@arabel.la',
-    description=ydcommon.__doc__,
+    description=ydcommon.__doc__.replace('\n', ''),
     long_description=long_description,
     zip_safe=False,
     install_requires=required_to_install,
