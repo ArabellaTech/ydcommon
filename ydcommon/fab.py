@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import base64
 import django
 import os
@@ -65,7 +67,7 @@ def release_qa(quietly=False):
     local('git flow release start %s' % release_name)
     local('git flow release publish %s' % release_name)
     if not quietly:
-        print red('PLEASE DEPLOY CODE: fab deploy:all')
+        print(red('PLEASE DEPLOY CODE: fab deploy:all'))
 
 
 def update_qa(quietly=False):
@@ -77,7 +79,7 @@ def update_qa(quietly=False):
     local('git merge --no-edit develop')
     local('git push')
     if not quietly:
-        print red('PLEASE DEPLOY CODE: fab deploy:all')
+        print(red('PLEASE DEPLOY CODE: fab deploy:all'))
 
 
 def _check_branch(environment, user, change=False):
@@ -202,7 +204,7 @@ def setup_server(clear_old=False, repo="github"):
     sudo('cp -f /home/%s/.ssh/id_rsa.pub ~/key.tmp' % env.remote_user, user='root')
     key = sudo('cat ~/key.tmp', user='root')
     sudo('rm ~/key.tmp', user='root')
-    print red('Please put following deploy key in %s' % url_keys)
+    print(red('Please put following deploy key in %s' % url_keys))
     print (key)
     prompt(red('Press any key to continue'))
     sudo('export WORKON_HOME=/home/%s/Envs &&\
