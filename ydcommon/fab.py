@@ -7,6 +7,7 @@ import uuid
 
 from datetime import datetime
 
+from django.conf import settings
 from django.template.defaultfilters import slugify as _slugify
 
 from fabric.api import cd
@@ -19,6 +20,8 @@ from fabric.api import sudo
 from fabric.colors import red
 from fabric.contrib.console import confirm
 from fabric.operations import prompt
+
+settings.configure()
 
 
 def _get_branch_name(on_local=True):
@@ -131,7 +134,7 @@ def _get_db():
         Get database from server
     """
     with cd(env.remote_path):
-        file_path = '/tmp/' + _sql_paths('remote', base64.urlsafe_b64encode(uuid.uuid4().bytes).replace('=', ''))
+        file_path = '/tmp/' + _sql_paths('remote', str(base64.urlsafe_b64encode(uuid.uuid4().bytes)).replace('=', ''))
         run(env.python + ' manage.py dump_database | gzip > ' + file_path)
         local_file_path = './backups/' + _sql_paths('remote', datetime.now())
     get(file_path, local_file_path)
