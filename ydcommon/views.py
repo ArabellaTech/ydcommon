@@ -2,7 +2,11 @@ import os
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
-from django.core.urlresolvers import reverse
+try:
+    from django.urls import reverse
+except ImportError:
+    # Django < 2.0
+    from django.core.urlresolvers import reverse
 
 from ydcommon.settings import IGNORE_QUNIT_HTML_FILES
 
@@ -13,7 +17,7 @@ class QunitTestsView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(QunitTestsView, self).get_context_data(**kwargs)
         if not kwargs['path'] or kwargs['path'] == 'index':
-            for template_dir in settings.TEMPLATE_DIRS:
+            for template_dir in settings.TEMPLATES[0]['DIRS']:
                 path = os.path.join(template_dir, 'js-tests')
                 files = [f.replace('.html', '') for f in os.listdir(path)
                          if os.path.isfile(os.path.join(path, f))]

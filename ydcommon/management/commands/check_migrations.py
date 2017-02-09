@@ -1,7 +1,6 @@
 import sys
 from django.conf import settings
-from django.core.management.base import NoArgsCommand
-from optparse import make_option
+from django.core.management.base import BaseCommand
 
 
 try:
@@ -11,16 +10,16 @@ except ImportError:
     pass
 
 
-class Command(NoArgsCommand):
-    option_list = NoArgsCommand.option_list + (
-        make_option('-x', '--xml-output', action='store_true',
-                    default=False,
-                    dest='xml_output',
-                    help='Render as XML'),
-    )
+class Command(BaseCommand):
     help = 'Render JSHint'
 
-    def handle_noargs(self, xml_output, **options):
+    def add_arguments(self, parser):
+        parser.add_argument('-x', '--xml-output', action='store_true',
+                            default=False,
+                            dest='xml_output',
+                            help='Render as XML')
+
+    def handle(self, *args, **options):
         cmd = "./manage.py schemamigration %s --auto"
         for app in settings.PROJECT_APPS:
             code, result = False, False
