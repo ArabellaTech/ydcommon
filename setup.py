@@ -26,10 +26,7 @@ requirements = local_open('requirements.txt')
 required_to_install = []
 for dist in requirements.readlines():
     dist = dist.strip()
-    try:
-        require(dist)
-    except DistributionNotFound:
-        required_to_install.append(dist)
+    required_to_install.append(dist)
 
 setup(
     name='ydcommon',
