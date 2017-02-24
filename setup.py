@@ -1,8 +1,6 @@
 import os
 import sys
 
-from pkg_resources import DistributionNotFound
-from pkg_resources import require
 from setuptools import find_packages
 from setuptools import setup
 
@@ -23,10 +21,7 @@ extra_kwargs = {'tests_require': ['mock>1.0']}
 ydcommon = __import__('ydcommon')
 
 requirements = local_open('requirements.txt')
-required_to_install = []
-for dist in requirements.readlines():
-    dist = dist.strip()
-    required_to_install.append(dist)
+required_to_install = [dist.strip() for dist in requirements.readlines()]
 
 setup(
     name='ydcommon',
