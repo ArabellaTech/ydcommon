@@ -1,22 +1,19 @@
+sudo: false
+
 language: python
+
 python:
   - "2.7"
   - "3.4"
   - "3.5"
   - "3.6"
 
-env:
-  - DJANGO="django>=1.8,<1.9"
-  - DJANGO="django>=1.9,<1.10"
-  - DJANGO="django>=1.10,<1.11"
-
 install:
- - pip install -r requirements.txt
- - pip install coverage coveralls
- - pip install $DJANGO
+  - pip install tox tox-travis coverage coveralls
 
 script:
   - coverage run --source=ydcommon setup.py test
+  - tox
 
 after_success:
   - coverage report --omit="ydcommon/tests/*" -m
