@@ -12,7 +12,6 @@ install:
   - pip install tox tox-travis coverage coveralls
 
 script:
-  - coverage run --source=ydcommon setup.py test
   - tox
 
 after_success:
