@@ -9,6 +9,7 @@ from django.template import RequestContext
 from django.http import HttpRequest
 from django.core.management import call_command
 
+from ydcommon.utils.settings import get_template_dirs
 from ydcommon.settings import IGNORE_QUNIT_HTML_FILES
 
 try:
@@ -42,7 +43,7 @@ class Command(BaseCommand):
 
         request = HttpRequest()
         data = RequestContext(request).dicts[0]
-        for template_dir in settings.TEMPLATES[0]['DIRS']:
+        for template_dir in get_template_dirs():
             path = os.path.join(template_dir, 'js-tests')
             if not os.path.exists(path):
                 continue
