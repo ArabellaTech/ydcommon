@@ -3,13 +3,13 @@ import sys
 import re
 
 from django.conf import settings
-from django.core.management.base import NoArgsCommand
+from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.http import HttpRequest
-from optparse import make_option
 from django.core.management import call_command
 
+from ydcommon.utils.settings import get_template_dirs
 from ydcommon.settings import IGNORE_QUNIT_HTML_FILES
 
 try:
@@ -21,16 +21,16 @@ except ImportError:
 RE_RESULTS = re.compile("<\!--(.*)-->", re.DOTALL)
 
 
-class Command(NoArgsCommand):
-    option_list = NoArgsCommand.option_list + (
-        make_option('-l', '--without-local-paths', action='store_false',
-                    default=True,
-                    dest='local_paths',
-                    help='Render with changing js path to local'),
-    )
+class Command(BaseCommand):
     help = 'Render mvc tests'
 
-    def handle_noargs(self, **options):
+    def add_arguments(self, parser):
+        parser.add_argument('-l', '--without-local-paths', action='store_false',
+                            default=True,
+                            dest='local_paths',
+                            help='Render with changing js path to local')
+
+    def handle(self, *args, **options):
         print('Preparing files')
         if 'django.contrib.staticfiles' in settings.INSTALLED_APPS:
             call_command('collectstatic', interactive=False)
@@ -42,8 +42,8 @@ class Command(NoArgsCommand):
                              '..', '..', 'scripts', 'run-qunit.js')
 
         request = HttpRequest()
-        data = RequestContext(request)
-        for template_dir in settings.TEMPLATE_DIRS:
+        data = RequestContext(request).dicts[0]
+        for template_dir in get_template_dirs():
             path = os.path.join(template_dir, 'js-tests')
             if not os.path.exists(path):
                 continue

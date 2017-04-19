@@ -19,10 +19,6 @@ DATABASES = {
 project = lambda: os.path.dirname(os.path.realpath(__file__))
 location = lambda x: os.path.join(str(project()), str(x))
 
-TEMPLATE_DIRS = (
-    location("templates"),
-)
-
 STATIC_ROOT = location("static")
 
 STATICFILES_DIRS = [
@@ -38,9 +34,37 @@ if django.VERSION >= (1, 8):
 else:
     TEST_RUNNER = 'django.test.simple.DjangoTestSuiteRunner'
 
-MIDDLEWARE_CLASSES = (
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            location("templates"),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'debug': False,
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
+            ],
+        },
+    },
+]
+
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
+if django.VERSION < (1, 10):
+    MIDDLEWARE_CLASSES = MIDDLEWARE + (
+        'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    )
+

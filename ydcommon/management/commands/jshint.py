@@ -1,7 +1,6 @@
 import sys
 from django.conf import settings
-from django.core.management.base import NoArgsCommand
-from optparse import make_option
+from django.core.management.base import BaseCommand
 
 from ydcommon.settings import JSHINT_FILES_FIND
 
@@ -12,20 +11,23 @@ except ImportError:
     pass
 
 
-class Command(NoArgsCommand):
-    option_list = NoArgsCommand.option_list + (
-        make_option('-x', '--xml-output', action='store_true',
-                    default=False,
-                    dest='xml_output',
-                    help='Render as XML'),
-        make_option('-d', '--dir', action='store',
-                    default=None,
-                    dest='search_dir',
-                    help='Search files in directory'),
-    )
+class Command(BaseCommand):
     help = 'Render JSHint'
 
-    def handle_noargs(self, xml_output, search_dir=None, **options):
+    def add_arguments(self, parser):
+        parser.add_argument('-x', '--xml-output', action='store_true',
+                            default=False,
+                            dest='xml_output',
+                            help='Render as XML')
+        parser.add_argument('-d', '--dir', action='store',
+                            default=None,
+                            dest='search_dir',
+                            help='Search files in directory')
+
+    def handle(self, *args, **options):
+        search_dir = options['search_dir']
+        xml_output = options['xml_output']
+
         files = []
         if search_dir is not None:
             search_dir = [search_dir]

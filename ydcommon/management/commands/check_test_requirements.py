@@ -2,7 +2,7 @@ from __future__ import print_function
 
 import sys
 
-from django.core.management.base import NoArgsCommand
+from django.core.management.base import BaseCommand
 
 try:
     import subprocess
@@ -11,7 +11,7 @@ except ImportError:
     pass
 
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     help = 'Check test requirements'
     errors = []
 
@@ -30,7 +30,7 @@ class Command(NoArgsCommand):
             self.errors.append('jshint')
         return code, result
 
-    def handle_noargs(self, **options):
+    def handle(self, *args, **options):
         self.check_req('jshint', 'jshint -v')
         code, result = self.check_req('phantomjs', 'phantomjs -v')
         if code == 0:

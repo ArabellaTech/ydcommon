@@ -1,7 +1,6 @@
 import sys
 from django.conf import settings
-from django.core.management.base import NoArgsCommand
-from optparse import make_option
+from django.core.management.base import BaseCommand
 
 
 try:
@@ -11,29 +10,25 @@ except ImportError:
     pass
 
 
-class Command(NoArgsCommand):
-    option_list = NoArgsCommand.option_list + (
-        make_option('-x', '--xml-output', action='store_true',
-                    default=False,
-                    dest='xml_output',
-                    help='Render as XML'),
-    )
+class Command(BaseCommand):
     help = 'Render JSHint'
 
-    def handle_noargs(self, xml_output, **options):
-        cmd = "./manage.py schemamigration %s --auto"
+    def handle(self, *args, **options):
+        cmd = "./manage.py makemigrations %s --check --dry-run"
         for app in settings.PROJECT_APPS:
+            # Skip main app name, e.g., demo.accounts => accounts
+            submodule = app[app.find('.') + 1:]
             code, result = False, False
             if sys.version_info > (2, 7):
                 try:
-                    result = subprocess.check_call(cmd % app,
+                    result = subprocess.check_call(cmd % submodule,
                                                    stderr=subprocess.STDOUT,
                                                    shell=True)
                 except subprocess.CalledProcessError as e:
                     code = e.returncode
                     result = e.output
             else:
-                code, result = commands.getstatusoutput(cmd % app)
+                code, result = commands.getstatusoutput(cmd % submodule)
 
-            if code != 1:
+            if code != 0:
                 raise Exception('Missing migration')

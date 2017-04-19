@@ -28,8 +28,10 @@ class QunitTests(TestCase):
 
     @mock.patch(CMD)
     @mock.patch(BUILTIN_MODULE + ".open")
-    def test_command(self, mock_open, mock_status):
+    @mock.patch('ydcommon.management.commands.run_qunit.render_to_string')
+    def test_command(self, mock_render, mock_open, mock_status):
         mock_status.return_value = CMD_VALUE
+        mock_render.return_value = ''
         call_command('run_qunit')
         self.assertTrue('example.html' in mock_status.call_args[0][0])
 
