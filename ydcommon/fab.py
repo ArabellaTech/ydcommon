@@ -185,7 +185,7 @@ def update_cron():
     sudo('crontab  %sconfig/crontab' % env.remote_path, user=env.remote_user)
 
 
-def setup_server(clear_old=False, repo="github"):
+def setup_server(clear_old=False, repo="github", python="/usr/bin/python3.6"):
     """
         Setup server
     """
@@ -212,7 +212,7 @@ def setup_server(clear_old=False, repo="github"):
     prompt(red('Press any key to continue'))
     sudo('export WORKON_HOME=/home/%s/Envs &&\
          source /usr/local/bin/virtualenvwrapper_lazy.sh &&\
-         mkvirtualenv %s --no-site-packages' % (env.remote_user, env.app_dir),
+         mkvirtualenv %s --no-site-packages -p %s' % (env.remote_user, env.app_dir, python),
          warn_only=True, user=env.remote_user)
     sudo('cd /home/%s/ && git clone %s www' % (env.remote_user, url_clone), user=env.remote_user)
     with cd(env.remote_path):
