@@ -4,16 +4,11 @@ import shlex
 import sys
 from django.core.management.base import BaseCommand, CommandError
 from django.db import connections, DEFAULT_DB_ALIAS
-from optparse import make_option
 
 DUMP_COMMAND_NAME = 'mysqldump'
 
+
 class Command(BaseCommand):
-    option_list = BaseCommand.option_list + (
-        make_option('--database', action='store', dest='database',
-            default=DEFAULT_DB_ALIAS, help='Nominates a database which to '
-                'dump.  Defaults to the "default" database.'),
-        )
     help = """\
 Dumps the whole database (mysql only!). Looks at the environment
 variable MYSQLDUMP_OPTIONS and uses what it finds there as additional
@@ -21,6 +16,15 @@ options."""
     args = "[table1 table2 ...]"
 
     requires_model_validation = False
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--database',
+            action='store',
+            dest='database',
+            default=DEFAULT_DB_ALIAS,
+            help='Nominates a database which to dump.  Defaults to the "default" database.',
+        )
 
     def handle(self, *args, **kwargs):
         connection = connections[kwargs.get('database', DEFAULT_DB_ALIAS)]
